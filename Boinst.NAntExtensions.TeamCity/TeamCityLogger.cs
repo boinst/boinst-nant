@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
 
@@ -13,6 +14,17 @@
         /// Holds a stack of reports for all running builds.
         /// </summary>
         private readonly Stack buildReports = new Stack();
+
+        /// <summary>
+        /// Tasks for which teamcity "log blocks" should not be written for.
+        /// </summary>
+        readonly List<string> tasksToSkipWritingBlocksFor = new List<string>(new[]
+            {
+                "", 
+                "echo", 
+                "property", 
+                "include"
+            });
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityLogger" /> 
@@ -153,7 +165,7 @@
             if (e.Target == null) return;
 
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockOpenedMessage(e.Target.Name));
-            Console.Out.WriteLine(TeamCityMessageFormatter.FormatProgressStartMessage(e.Target.Name));
+            Console.Out.WriteLine(TeamCityMessageFormatter.FormatProgressStartMessage("Target: " + e.Target.Name));
         }
 
         /// <summary>
@@ -166,7 +178,7 @@
         /// </remarks>
         public virtual void TargetFinished(object sender, BuildEventArgs e)
         {
-            Console.Out.WriteLine(TeamCityMessageFormatter.FormatProgressFinishMessage(e.Target.Name));
+            Console.Out.WriteLine(TeamCityMessageFormatter.FormatProgressFinishMessage("Target: " + e.Target.Name));
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockClosedMessage(e.Target.Name));
         }
 
@@ -177,6 +189,8 @@
         /// <param name="e">A <see cref="BuildEventArgs" /> object that contains the event data.</param>
         public virtual void TaskStarted(object sender, BuildEventArgs e)
         {
+            if (this.ShouldSkipWritingBlocksForTask(e.Task)) return;
+
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockOpenedMessage(e.Task.Name));
         }
 
@@ -190,7 +204,20 @@
         /// </remarks>
         public virtual void TaskFinished(object sender, BuildEventArgs e)
         {
+            if (this.ShouldSkipWritingBlocksForTask(e.Task)) return;
+
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockClosedMessage(e.Task.Name));
+        }
+
+        /// <summary>
+        /// For some tasks, we don't want TeamCity to have a dedicated log block for;
+        /// these tasks just clutter up the logs otherwise.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        private bool ShouldSkipWritingBlocksForTask(Task task)
+        {
+            return tasksToSkipWritingBlocksFor.Contains(task.Name.ToLowerInvariant());
         }
 
         /// <summary>
