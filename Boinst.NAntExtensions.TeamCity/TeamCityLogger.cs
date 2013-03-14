@@ -162,7 +162,7 @@
         /// <param name="e">A <see cref="BuildEventArgs" /> object that contains the event data.</param>
         public virtual void TargetStarted(object sender, BuildEventArgs e)
         {
-            if (e.Target == null) return;
+            if (e == null || e.Target == null) return;
 
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockOpenedMessage(e.Target.Name));
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatProgressStartMessage("Target: " + e.Target.Name));
@@ -178,6 +178,8 @@
         /// </remarks>
         public virtual void TargetFinished(object sender, BuildEventArgs e)
         {
+            if (e == null || e.Target == null) return;
+
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatProgressFinishMessage("Target: " + e.Target.Name));
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockClosedMessage(e.Target.Name));
         }
@@ -189,6 +191,7 @@
         /// <param name="e">A <see cref="BuildEventArgs" /> object that contains the event data.</param>
         public virtual void TaskStarted(object sender, BuildEventArgs e)
         {
+            if (e == null || e.Task == null) return;
             if (this.ShouldSkipWritingBlocksForTask(e.Task)) return;
 
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockOpenedMessage(e.Task.Name));
@@ -204,6 +207,7 @@
         /// </remarks>
         public virtual void TaskFinished(object sender, BuildEventArgs e)
         {
+            if (e == null || e.Task == null) return;
             if (this.ShouldSkipWritingBlocksForTask(e.Task)) return;
 
             Console.Out.WriteLine(TeamCityMessageFormatter.FormatBlockClosedMessage(e.Task.Name));
@@ -217,6 +221,7 @@
         /// <returns></returns>
         private bool ShouldSkipWritingBlocksForTask(Task task)
         {
+            if (task == null || task.Name == null) return true;
             return tasksToSkipWritingBlocksFor.Contains(task.Name.ToLowerInvariant());
         }
 
