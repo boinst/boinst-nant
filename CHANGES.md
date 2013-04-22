@@ -10,3 +10,9 @@ Change Log
         
 0.3 - 2013.03.08
         Fixed bugs. Fixed a few potential null reference exceptions.
+        
+0.4 - 2013.04.22
+        Added TeamCity tasks. 
+        "teamcity-publishartifacts" for publishing artifacts.
+        "teamcity-setbuildnumber" for setting the build number.
+        "teamcity-progressmessage" for logging a teamcity progress message.
