@@ -8,6 +8,10 @@
 
     using NAnt.Core;
 
+    /// <summary>
+    /// A logger that writes TeamCity control messages
+    /// that allow TeamCity to format logs nicely.
+    /// </summary>
     public class TeamCityLogger : IBuildLogger
     { 
         /// <summary>
@@ -16,14 +20,15 @@
         private readonly Stack buildReports = new Stack();
 
         /// <summary>
-        /// Tasks for which teamcity "log blocks" should not be written for.
+        /// Tasks for which TeamCity "log blocks" should not be written for.
         /// </summary>
-        readonly List<string> tasksToSkipWritingBlocksFor = new List<string>(new[]
+        private readonly List<string> tasksToSkipWritingBlocksFor = new List<string>(new[]
             {
-                "", 
+                string.Empty, 
                 "echo", 
                 "property", 
-                "include"
+                "include",
+                "if"
             });
 
         /// <summary>
@@ -217,12 +222,12 @@
         /// For some tasks, we don't want TeamCity to have a dedicated log block for;
         /// these tasks just clutter up the logs otherwise.
         /// </summary>
-        /// <param name="task"></param>
-        /// <returns></returns>
+        /// <param name="task">The task we're checking.</param>
+        /// <returns>"true" if the task should not have a block written for it.</returns>
         private bool ShouldSkipWritingBlocksForTask(Task task)
         {
             if (task == null || task.Name == null) return true;
-            return tasksToSkipWritingBlocksFor.Contains(task.Name.ToLowerInvariant());
+            return this.tasksToSkipWritingBlocksFor.Contains(task.Name.ToLowerInvariant());
         }
 
         /// <summary>
@@ -289,7 +294,7 @@
                 new TeamCityMessage 
                     {
                         Level = e.MessageLevel,
-                        ErrorDetails = e.Exception == null ? "" : e.Exception.ToString(),
+                        ErrorDetails = e.Exception == null ? string.Empty : e.Exception.ToString(),
                         Text = e.Message
                     });
             Console.Out.WriteLine(message);
