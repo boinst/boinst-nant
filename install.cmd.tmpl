@@ -1,0 +1,23 @@
+@echo off
+setlocal enableextensions enabledelayedexpansion
+set OD=%CD%
+cd /d %~dp0
+
+:## Make msbuild available on the Path.
+set Path=%Path%;%SystemRoot%\Microsoft.NET\Framework\v4.0.30319
+
+:BUILD
+echo ...compiling...
+msbuild /m /nologo /p:Configuration=Release /p:Platform="Any CPU" Boinst.NAntExtensions.sln
+
+:INSTALL
+echo ...installing...
+copy /Y ".\Boinst.NAntExtensions.TeamCity\bin\Release\Boinst.NAntExtensions.TeamCity.dll" "C:\Tools\NAnt\extensions\common\4.0"
+copy /Y ".\Boinst.NAntExtensions\bin\Release\Boinst.NAntExtensions.dll" "C:\Tools\NAnt\extensions\common\4.0"
+
+:EXIT
+cd /d %OD%
+endlocal
+@pause
+
+:EOF

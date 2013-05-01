@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boinst.NAntExtensions.TeamCity", "Boinst.NAntExtensions.TeamCity\Boinst.NAntExtensions.TeamCity.csproj", "{2D51267D-145D-44BB-BA86-FBA26CF8A1E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boinst.NAntExtensions", "Boinst.NAntExtensions\Boinst.NAntExtensions.csproj", "{E9308E72-6D16-4914-B447-6E4F35120B12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{2D51267D-145D-44BB-BA86-FBA26CF8A1E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D51267D-145D-44BB-BA86-FBA26CF8A1E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D51267D-145D-44BB-BA86-FBA26CF8A1E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9308E72-6D16-4914-B447-6E4F35120B12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9308E72-6D16-4914-B447-6E4F35120B12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9308E72-6D16-4914-B447-6E4F35120B12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9308E72-6D16-4914-B447-6E4F35120B12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

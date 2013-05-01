@@ -16,3 +16,6 @@ Change Log
         "teamcity-publishartifacts" for publishing artifacts.
         "teamcity-setbuildnumber" for setting the build number.
         "teamcity-progressmessage" for logging a teamcity progress message.
+        
+0.5 - 2013.05.01
+        Added "mutex" task.
