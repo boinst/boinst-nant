@@ -1,61 +1,142 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <head>
+        <meta charset='utf-8'>
+        <title>Boinst's NAnt Extensions</title>
+        <!-- init jquery -->
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <!-- init showdown -->
+        <script src="http://cachedcommons.org/cache/showdown/1.0.0/javascripts/showdown-min.js"></script>
+        <script>
+            window.onload = function (){
+                var content = document.getElementById("content");
+                content.innerHTML = (new Showdown.converter()).makeHtml(content.innerHTML);
+                
+                // remove leading linebreaks from code blocks.
+                var pre = document.getElementsByTagName("code");
+                for (var i = 0, len = pre.length; i < len; i++) {
+                    var text = pre[i].firstChild.nodeValue;
+                    pre[i].firstChild.nodeValue = text.replace(/^\n+|\n+$/, "");
+                }
+            }
+        </script>
+        <!-- init highlight.js -->
+        <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/monokai.min.css">
+        <script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+        <script>
+            hljs.tabReplace = '    ';
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            body { margin-left: 100px; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif }
+            h1 { border-bottom: 1px solid #ddd }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+        
+Boinst's NAnt Extensions
+========================
 
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+A collection of NAnt Extensions
+-------------------------------
 
-    <title>NAnt TeamCity Logger by boinst</title>
-  </head>
+[Download Source][3] - [Download Binary][2] - [View on GitHub][3]
 
-  <body>
+## What is Boinst's NAnt TeamCity Extensions?
 
-    <header>
-      <div class="container">
-        <h1>NAnt TeamCity Logger</h1>
-        <h2></h2>
+This is a collection of extensions for NAnt, organised into the following assemblies. 
 
-        <section id="downloads">
-          <a href="https://github.com/boinst/nant-teamcity-logger" class="btn">Download Source</a>
-          <a href="https://sourceforge.net/projects/nant-tc-log/files/" class="btn">Download Binary</a>
-          <a href="https://github.com/boinst/nant-teamcity-logger" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+**Boinst.NAntExtensions**
 
-    <div class="container">
-      <section id="main_content">
-        <h3>What is this?</h3>
+Handy extensions for NAnt. 
 
-<p>This is a logger that you can use with NAnt so that <a href="http://www.jetbrains.com/teamcity/">TeamCity</a> will properly display log messages from NAnt.</p>
+**Boinst.NAntExtensions.TeamCity**
 
-<h3>Installation</h3>
+What you get here is a collection of NAnt Extensions that you can use when you're running an NAnt build under JetBrains' [TeamCity][1] CI Server. 
 
-<p>Download the latest version from <a href="https://sourceforge.net/projects/nant-tc-log/files/">our SourceForge site</a>.</p>
+## Installation
 
-<p>Extract the file <code>Boinst.NAntExtensions.TeamCity.dll</code> from the archive and copy it into the <code>extensions\common\4.0</code> subdirectory of your NAnt installation.</p>
+Download the latest version from [our SourceForge site][2], or grab the [source from GitHub][3].
 
-<h3>Invokation</h3>
+Extract the archive (or compile the extensions from source), and copy the .dll files into the `extensions\common\4.0` subdirectory of your NAnt installation.
 
-<p>Launch NAnt with the following syntax:</p>
+## Boinst.NAntExtensions
 
-<p><code>NAnt.exe -logger:Boinst.NAntExtensions.TeamCity.TeamCityLogger</code></p>
+### NAnt Mutex Task
 
-<h3>Problems?</h3>
+#### What is it good for?
 
-<p>Please report any issues <a href="https://github.com/boinst/nant-teamcity-logger/issues">on our GitHub issue tracker</a>.</p>
+Run any block of actions within a global mutex. Particularly useful within a CI context, if you are manipulating some fixed location,
+or performing a system action like installing an MSI package.
 
-<h3>See Also</h3>
+#### Invocation
 
-<ul>
-<li><a href="http://nant.sourceforge.net/release/0.91/help/fundamentals/listeners.html">NAnt documentation on Loggers</a></li>
-</ul>
-      </section>
-    </div>
+<pre><code>
+&lt;mutex name="mymutexname" global="true" timeout="1000"&gt;
+    ... do stuff here
+&lt;/mutex&gt;
+</code></pre>
 
-    
-  </body>
+* "name" is required.
+* "global" is "true" by default, and produces a global mutex.
+* "timeout" is "-1" (no time limit) by default, and is in milliseconds.
+
+### NAnt Quiet Task
+
+#### What is it good for?
+
+Suppress the output of particularly verbose tasks.
+
+#### Invocation
+
+<pre><code>
+&lt;quiet&gt;
+    ... do stuff here
+&lt;/quiet&gt;
+</code></pre>
+
+## Boinst.NAntExtensions.TeamCity
+
+### TeamCity Logger
+
+#### What is it good for?
+
+When you use TeamCity's inbuilt version of NAnt, you get your logs formatted nicely, particularly in the "Tree View" log panel. This logger allows you to get similar logging while allowing you the flexibility of using your preferred version of NAnt. 
+
+#### Invocation
+
+Launch NAnt with the following syntax:
+
+`NAnt.exe -logger:Boinst.NAntExtensions.TeamCity.TeamCityLogger`
+
+#### See Also
+
+*   [NAnt documentation on Loggers][4]
+
+### Publish Artifacts to TeamCity
+
+#### What is it good for?
+
+This NAnt task allows you to publish artifacts to TeamCity while a build is in progress. 
+
+#### Invocation
+
+#### See Also
+
+*   [TeamCity documentation on publishing artifacts while a build is in progress][5]
+
+## Problems?
+
+Please report any issues [on our GitHub issue tracker][6].
+
+ [1]: http://www.jetbrains.com/teamcity/
+ [2]: https://sourceforge.net/projects/nant-tc-log/files/
+ [3]: https://github.com/boinst/boinst-nant
+ [4]: http://nant.sourceforge.net/release/0.91/help/fundamentals/listeners.html
+ [5]: http://confluence.jetbrains.com/display/TCD7/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-PublishingArtifactswhiletheBuildisStillinProgress
+ [6]: https://github.com/boinst/boinst-nant/issues
+        
+        </div>
+    </body>
 </html>
