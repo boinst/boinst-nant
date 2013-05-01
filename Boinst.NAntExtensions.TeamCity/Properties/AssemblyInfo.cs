@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Boinst.NAntExtensions.TeamCityLogger")]
+[assembly: AssemblyTitle("Boinst.NAntExtensions.TeamCity")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Boinst.NAntExtensions.TeamCityLogger")]
+[assembly: AssemblyProduct("Boinst.NAntExtensions.TeamCity")]
 [assembly: AssemblyCopyright("Copyright © 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,5 +21,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("59087455-63f5-4588-8934-c94e72769984")]
 
-[assembly: AssemblyVersion("0.4.*")]
-[assembly: AssemblyFileVersion("0.4.0.0")]
+[assembly: AssemblyVersion("0.5.*")]
+[assembly: AssemblyFileVersion("0.5.0.0")]
