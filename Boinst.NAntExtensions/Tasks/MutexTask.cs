@@ -1,4 +1,4 @@
-﻿namespace Boinst.NAntExtensions.Tasks
+﻿namespace Boinst.NAntExtensions
 {
     using System.Security.AccessControl;
     using System.Security.Principal;

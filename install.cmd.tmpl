@@ -12,8 +12,9 @@ msbuild /m /nologo /p:Configuration=Release /p:Platform="Any CPU" Boinst.NAntExt
 
 :INSTALL
 echo ...installing...
-copy /Y ".\Boinst.NAntExtensions.TeamCity\bin\Release\Boinst.NAntExtensions.TeamCity.dll" "C:\Tools\NAnt\extensions\common\4.0"
 copy /Y ".\Boinst.NAntExtensions\bin\Release\Boinst.NAntExtensions.dll" "C:\Tools\NAnt\extensions\common\4.0"
+copy /Y ".\Boinst.NAntExtensions.TeamCity\bin\Release\Boinst.NAntExtensions.TeamCity.dll" "C:\Tools\NAnt\extensions\common\4.0"
+copy /Y ".\Boinst.NUnitAddins.TeamCity\bin\Release\Boinst.NUnitAddins.TeamCity.dll" "C:\Tools\NUnit\addins"
 
 :EXIT
 cd /d %OD%
