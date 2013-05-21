@@ -47,7 +47,7 @@
             this.lastTest = null;
 
             var testReportingName = this.RenameTest(result.Test.TestName.FullName);
-            if (result.IsFailure) Console.WriteLine(TeamCityMessageFormatter.FormatTestFailedMessage(testReportingName));
+            if (result.IsFailure) Console.WriteLine(TeamCityMessageFormatter.FormatTestFailedMessage(testReportingName, result.Message, result.Description));
 
             Console.WriteLine(TeamCityMessageFormatter.FormatTestFinishedMessage(testReportingName));
         }

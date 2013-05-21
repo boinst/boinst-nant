@@ -4,10 +4,12 @@
 
     public static class TeamCityMessageFormatter
     {
-        public static string FormatTestFailedMessage(string testname)
+        public static string FormatTestFailedMessage(string testname, string message, string detail)
         {
             testname = EscapeInvalidCharacters(testname);
-            return string.Format("##teamcity[testFailed name='{0}']", testname);
+            message = EscapeInvalidCharacters(message);
+            detail = EscapeInvalidCharacters(detail);
+            return string.Format("##teamcity[testFailed name='{0}' message='{1}' details='{2}']", testname, message, detail);
         }
 
         public static string FormatTestFinishedMessage(string testname)
