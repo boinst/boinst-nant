@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Functions\IntFunctions.cs" />
+    <Compile Include="Functions\Win32Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\MutexTask.cs" />
     <Compile Include="Tasks\QuietTask.cs" />
