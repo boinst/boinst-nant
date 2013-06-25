@@ -15,14 +15,21 @@
         public void RunFinished(TestResult result) {}
         public void RunFinished(Exception exception) { }
         public void UnhandledException(Exception exception) { }
+
         public void TestOutput(TestOutput testOutput)
         {
             if (this.lastTest == null) return;
 
+            // Ignore TeamCity control messages. These are probably our own messages anyway.
+            if (testOutput.Text.ToLowerInvariant().Contains("##teamcity")) return;
+
+            // Ignore blank messages, or messages that consist of empty lines.
+            if (string.IsNullOrWhiteSpace(testOutput.Text)) return;
+
             if (testOutput.Type == TestOutputType.Error)
-                Console.WriteLine(TeamCityMessageFormatter.FormatTestErrorMessage(this.lastTest, testOutput.Text));
+                Console.WriteLine(TeamCityMessageFormatter.FormatTestErrorMessage(this.lastTest, testOutput.Text.Trim()));
             else if (testOutput.Type == TestOutputType.Log || testOutput.Type == TestOutputType.Out)
-                Console.WriteLine(TeamCityMessageFormatter.FormatTestOutputMessage(this.lastTest, testOutput.Text));
+                Console.WriteLine(TeamCityMessageFormatter.FormatTestOutputMessage(this.lastTest, testOutput.Text.Trim()));
         }
 
         public void SuiteStarted(TestName testName)

@@ -19,6 +19,7 @@
             
             listeners.Install(new TeamCityTestReporterListener());
 
+
             return true;
         }
 
