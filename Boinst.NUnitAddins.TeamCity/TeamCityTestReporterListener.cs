@@ -54,11 +54,15 @@
             this.lastTest = null;
 
             var testReportingName = this.RenameTest(result.Test.TestName.FullName);
-            if (result.IsFailure) Console.WriteLine(TeamCityMessageFormatter.FormatTestFailedMessage(testReportingName, result.Message, result.Description));
+            if (!result.IsSuccess) Console.WriteLine(TeamCityMessageFormatter.FormatTestFailedMessage(testReportingName, result.Message, result.Description));
 
             Console.WriteLine(TeamCityMessageFormatter.FormatTestFinishedMessage(testReportingName));
         }
 
+        /// <summary>
+        /// This extension allows the user to add a suffix to test names
+        /// by defining the environment variable NUNIT_TEAMCITY_TEST_SUFFIX.
+        /// </summary>
         public string RenameTest(string testname)
         {
             string suffix = Environment.GetEnvironmentVariable("NUNIT_TEAMCITY_TEST_SUFFIX");
