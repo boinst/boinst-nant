@@ -2,6 +2,9 @@
 {
     using System.Text;
 
+    /// <summary>
+    /// This class contains the methods for formatting 
+    /// </summary>
     public static class TeamCityMessageFormatter
     {
         public static string FormatTestFailedMessage(string testname, string message, string detail)
@@ -11,6 +14,12 @@
             detail = EscapeInvalidCharacters(detail);
 
             return string.Format("##teamcity[testFailed name='{0}' message='{1}' details='{2}']", testname, message, detail);
+        }
+
+        public static string FormatTestStartedMessage(string testname)
+        {
+            testname = EscapeInvalidCharacters(testname);
+            return string.Format("##teamcity[testStarted name='{0}']", testname);
         }
 
         public static string FormatTestFinishedMessage(string testname)
@@ -39,6 +48,9 @@
 
         public static string EscapeInvalidCharacters(string text)
         {
+            if (string.IsNullOrWhiteSpace(text)) 
+                return string.Empty;
+
             var builder = new StringBuilder(text.Trim());
             builder.Replace("|", "||");
             builder.Replace("'", "|'");

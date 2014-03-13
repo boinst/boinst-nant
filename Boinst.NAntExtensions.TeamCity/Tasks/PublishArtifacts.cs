@@ -44,10 +44,13 @@
             set;
         }
 
+        /// <summary>
+        /// Publish the artifacts
+        /// </summary>
         protected override void ExecuteTask()
         {
             // log the message: Artifact "ArtifactName" is ready for publishing at path "Path" (100MB)
-            StringBuilder message = new StringBuilder("Artifact ");
+            var message = new StringBuilder("Artifact ");
             if (!string.IsNullOrWhiteSpace(this.ArtifactName))
                 message.AppendFormat("\"{0}\" ", this.ArtifactName);
             message.AppendFormat("is ready for publishing at path \"{0}\"", this.Artifact);

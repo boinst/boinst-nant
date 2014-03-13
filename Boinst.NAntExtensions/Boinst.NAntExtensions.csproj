@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Functions\GuidFunctions.cs" />
     <Compile Include="Functions\HashFunctions.cs" />
     <Compile Include="Functions\IntFunctions.cs" />
+    <Compile Include="Functions\RandomFunctions.cs" />
     <Compile Include="Functions\Win32Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\JunctionPoint.cs" />

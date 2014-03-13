@@ -10,8 +10,12 @@
     [NUnitAddin(Name = "TeamCityTestReporter", Description = "Reports running NUnit tests to TeamCity.")]
     public class TeamCityTestReporterAddIn : IAddin
     {
+        /// <summary>
+        /// Install the extension.
+        /// </summary>
         public bool Install(IExtensionHost host)
         {
+            // If we're not running under TeamCity, nothing to do here.
             if (!InTeamcity()) return true;
 
             var listeners = host.GetExtensionPoint("EventListeners");
@@ -19,10 +23,8 @@
             
             listeners.Install(new TeamCityTestReporterListener());
 
-
             return true;
         }
-
 
         /// <summary>
         /// Are we currently in TeamCity?

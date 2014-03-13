@@ -48,7 +48,7 @@
 
         public static string EscapeInvalidCharacters(string text)
         {
-            StringBuilder builder = new StringBuilder(text);
+            var builder = new StringBuilder(text);
             builder.Replace("|", "||");
             builder.Replace("'", "|'");
             builder.Replace("\n", "|n");

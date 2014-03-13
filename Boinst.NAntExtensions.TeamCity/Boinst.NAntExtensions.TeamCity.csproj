@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\FailBuildTask.cs" />
     <Compile Include="Tasks\ProgressMessageTask.cs" />
     <Compile Include="Tasks\PublishArtifacts.cs" />
     <Compile Include="Tasks\SetBuildNumberTask.cs" />

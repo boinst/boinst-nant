@@ -9,7 +9,7 @@
     /// </summary>
     public class TeamCityTestReporterListener : EventListener
     {
-        private string lastTest;
+        private string currentTest;
 
         public void RunStarted(string name, int testCount) {}
         public void RunFinished(TestResult result) {}
@@ -18,7 +18,7 @@
 
         public void TestOutput(TestOutput testOutput)
         {
-            if (this.lastTest == null) return;
+            if (this.currentTest == null) return;
 
             // Ignore TeamCity control messages. These are probably our own messages anyway.
             if (testOutput.Text.ToLowerInvariant().Contains("##teamcity")) return;
@@ -27,9 +27,9 @@
             if (string.IsNullOrWhiteSpace(testOutput.Text)) return;
 
             if (testOutput.Type == TestOutputType.Error)
-                Console.WriteLine(TeamCityMessageFormatter.FormatTestErrorMessage(this.lastTest, testOutput.Text.Trim()));
-            else if (testOutput.Type == TestOutputType.Log || testOutput.Type == TestOutputType.Out)
-                Console.WriteLine(TeamCityMessageFormatter.FormatTestOutputMessage(this.lastTest, testOutput.Text.Trim()));
+                Console.WriteLine(TeamCityMessageFormatter.FormatTestErrorMessage(this.currentTest, testOutput.Text.Trim()));
+            else if (testOutput.Type != TestOutputType.Trace)
+                Console.WriteLine(TeamCityMessageFormatter.FormatTestOutputMessage(this.currentTest, testOutput.Text.Trim()));
         }
 
         public void SuiteStarted(TestName testName)
@@ -42,20 +42,26 @@
             Console.WriteLine("##teamcity[testSuiteFinished name='{0}']", result.Test.TestName.FullName);
         }
 
+        /// <summary>
+        /// Called before a test is started.
+        /// </summary>
         public void TestStarted(TestName testName)
         {
             var testReportingName = this.RenameTest(testName.FullName);
-            this.lastTest = testReportingName;
-            Console.WriteLine("##teamcity[testStarted name='{0}']", testReportingName);
+            this.currentTest = testReportingName;
+            Console.WriteLine(TeamCityMessageFormatter.FormatTestStartedMessage(testReportingName));
         }
 
+        /// <summary>
+        /// Called when a test has finished running.
+        /// </summary>
         public void TestFinished(TestResult result)
         {
-            this.lastTest = null;
+            this.currentTest = null;
 
             var testReportingName = this.RenameTest(result.Test.TestName.FullName);
-            if (!result.IsSuccess) Console.WriteLine(TeamCityMessageFormatter.FormatTestFailedMessage(testReportingName, result.Message, result.Description));
-
+            if (!result.IsSuccess) Console.WriteLine(TeamCityMessageFormatter.FormatTestFailedMessage(testReportingName, result.Message, result.Description ?? result.StackTrace));
+            
             Console.WriteLine(TeamCityMessageFormatter.FormatTestFinishedMessage(testReportingName));
         }
 
