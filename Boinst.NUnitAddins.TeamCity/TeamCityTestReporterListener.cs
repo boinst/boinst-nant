@@ -1,6 +1,9 @@
 ﻿namespace Boinst.NUnitAddins.TeamCity
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
 
     using NUnit.Core;
 
@@ -34,12 +37,20 @@
 
         public void SuiteStarted(TestName testName)
         {
-            Console.WriteLine("##teamcity[testSuiteStarted name='{0}']", testName.FullName);
+            var name = this.GetSuiteName(testName.Name);
+            Console.WriteLine(TeamCityMessageFormatter.FormatSuiteStartedMessage(name));
         }
 
         public void SuiteFinished(TestResult result)
         {
-            Console.WriteLine("##teamcity[testSuiteFinished name='{0}']", result.Test.TestName.FullName);
+            var name = this.GetSuiteName(result.Test.TestName.Name);
+            Console.WriteLine(TeamCityMessageFormatter.FormatSuiteFinishedMessage(name));
+        }
+
+        private string GetSuiteName(string name)
+        {
+            if (Path.IsPathRooted(name)) return Path.GetFileName(name);
+            else return name;
         }
 
         /// <summary>
@@ -47,9 +58,21 @@
         /// </summary>
         public void TestStarted(TestName testName)
         {
-            var testReportingName = this.RenameTest(testName.FullName);
+            var suites = this.GetSuiteNames(testName.Name).ToArray();
+
+            var testReportingName = suites.First();
             this.currentTest = testReportingName;
+
+            if (suites.Count() != 1)
+            {
+                foreach (var suite in suites)
+                {
+                    Console.WriteLine(TeamCityMessageFormatter.FormatSuiteStartedMessage(suite));
+                }
+            }
+
             Console.WriteLine(TeamCityMessageFormatter.FormatTestStartedMessage(testReportingName));
+            Console.WriteLine(TeamCityMessageFormatter.FormatTestOutputMessage(testReportingName, "Starting test: " + testName.FullName));
         }
 
         /// <summary>
@@ -59,20 +82,43 @@
         {
             this.currentTest = null;
 
-            var testReportingName = this.RenameTest(result.Test.TestName.FullName);
+            var suites = this.GetSuiteNames(result.Test.TestName.Name).ToArray();
+
+            var testReportingName = suites.First();
             if (!result.IsSuccess) Console.WriteLine(TeamCityMessageFormatter.FormatTestFailedMessage(testReportingName, result.Message, result.Description ?? result.StackTrace));
-            
+
+            Console.WriteLine(TeamCityMessageFormatter.FormatTestOutputMessage(testReportingName, "Test finished: " + result.Test.TestName.Name));
             Console.WriteLine(TeamCityMessageFormatter.FormatTestFinishedMessage(testReportingName));
+
+            if (suites.Count() != 1)
+            {
+                foreach (var suite in suites.Reverse())
+                {
+                    Console.WriteLine(TeamCityMessageFormatter.FormatSuiteFinishedMessage(suite));
+                }
+            }
         }
 
         /// <summary>
-        /// This extension allows the user to add a suffix to test names
-        /// by defining the environment variable NUNIT_TEAMCITY_TEST_SUFFIX.
+        /// We break a parameterised test name into suite names so that TeamCity
+        /// can handle it better.
         /// </summary>
-        public string RenameTest(string testname)
+        private IEnumerable<string> GetSuiteNames(string name)
         {
+            var parts = name.Split(new[] { "\"", "(", ")", ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var part in parts)
+            {
+                if (!char.IsLetter(part.First())) 
+                    yield return "_" + part;
+                else 
+                    yield return part;
+            }
+
+            // This extension allows the user to add a suffix to test names
+            // by defining the environment variable NUNIT_TEAMCITY_TEST_SUFFIX.
             string suffix = Environment.GetEnvironmentVariable("NUNIT_TEAMCITY_TEST_SUFFIX");
-            return string.IsNullOrWhiteSpace(suffix) ? testname : testname + suffix;
+            if (!string.IsNullOrWhiteSpace(suffix)) yield return suffix;
         }
     }
 }

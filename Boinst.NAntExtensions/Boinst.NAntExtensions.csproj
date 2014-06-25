@@ -53,6 +53,7 @@
     <Compile Include="Tasks\MutexTask.cs" />
     <Compile Include="Tasks\PushdTask.cs" />
     <Compile Include="Tasks\QuietTask.cs" />
+    <Compile Include="Tasks\WhileTask.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

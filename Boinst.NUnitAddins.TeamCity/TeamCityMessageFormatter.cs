@@ -22,6 +22,18 @@
             return string.Format("##teamcity[testStarted name='{0}']", testname);
         }
 
+        public static string FormatSuiteStartedMessage(string suiteName)
+        {
+            suiteName = EscapeInvalidCharacters(suiteName);
+            return string.Format("##teamcity[testSuiteStarted name='{0}']", suiteName);
+        }
+
+        public static string FormatSuiteFinishedMessage(string suiteName)
+        {
+            suiteName = EscapeInvalidCharacters(suiteName);
+            return string.Format("##teamcity[testSuiteFinished name='{0}']", suiteName);
+        }
+
         public static string FormatTestFinishedMessage(string testname)
         {
             testname = EscapeInvalidCharacters(testname);
