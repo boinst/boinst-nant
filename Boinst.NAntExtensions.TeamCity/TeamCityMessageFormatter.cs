@@ -1,5 +1,6 @@
 ﻿namespace Boinst.NAntExtensions.TeamCity
 {
+    using System;
     using System.Text;
 
     using NAnt.Core;
@@ -46,6 +47,57 @@
             return string.Format("##teamcity[blockClosed name='{0}']", blockName);
         }
 
+        public static string FormatTestFailedMessage(string testname, string message, string detail)
+        {
+            testname = EscapeInvalidCharacters(testname);
+            message = EscapeInvalidCharacters(message);
+            detail = EscapeInvalidCharacters(detail);
+
+            return string.Format("##teamcity[testFailed name='{0}' message='{1}' details='{2}']", testname, message, detail);
+        }
+
+        public static string FormatTestStartedMessage(string testname)
+        {
+            testname = EscapeInvalidCharacters(testname);
+            return string.Format("##teamcity[testStarted name='{0}']", testname);
+        }
+
+        public static string FormatSuiteStartedMessage(string suiteName)
+        {
+            suiteName = EscapeInvalidCharacters(suiteName);
+            return string.Format("##teamcity[testSuiteStarted name='{0}']", suiteName);
+        }
+
+        public static string FormatSuiteFinishedMessage(string suiteName)
+        {
+            suiteName = EscapeInvalidCharacters(suiteName);
+            return string.Format("##teamcity[testSuiteFinished name='{0}']", suiteName);
+        }
+
+        public static string FormatTestFinishedMessage(string testname)
+        {
+            testname = EscapeInvalidCharacters(testname);
+            return string.Format("##teamcity[testFinished name='{0}']", testname);
+        }
+
+        public static string FormatTestErrorMessage(string testname, string text)
+        {
+            if (text.ToLowerInvariant().Contains("##teamcity")) return text.Trim();
+
+            testname = EscapeInvalidCharacters(testname);
+            text = EscapeInvalidCharacters(text);
+            return string.Format("##teamcity[testStdErr name='{0}' out='{1}']", testname, text);
+        }
+
+        public static string FormatTestOutputMessage(string testname, string text)
+        {
+            if (text.ToLowerInvariant().Contains("##teamcity")) return text.Trim();
+
+            testname = EscapeInvalidCharacters(testname);
+            text = EscapeInvalidCharacters(text);
+            return string.Format("##teamcity[testStdOut name='{0}' out='{1}']", testname, text);
+        }
+
         public static string EscapeInvalidCharacters(string text)
         {
             var builder = new StringBuilder(text);
@@ -69,6 +121,15 @@
                 default:
                     return "NORMAL";
             }
+        }
+
+        /// <summary>
+        /// We are *in* TeamCity if the environment variable TEAMCITY_VERSION is set
+        /// to a non-empty value.
+        /// </summary>
+        public static bool InTeamcity()
+        {
+            return !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
         }
     }
 }

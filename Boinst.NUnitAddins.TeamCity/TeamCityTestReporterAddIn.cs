@@ -33,7 +33,6 @@
         /// </summary>
         private static bool InTeamcity()
         {
-            return true;
             return !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
         }
     }

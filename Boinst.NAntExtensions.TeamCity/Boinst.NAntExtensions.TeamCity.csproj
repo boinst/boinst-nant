@@ -48,6 +48,8 @@
     <Compile Include="Tasks\ProgressMessageTask.cs" />
     <Compile Include="Tasks\PublishArtifacts.cs" />
     <Compile Include="Tasks\SetBuildNumberTask.cs" />
+    <Compile Include="Tasks\TestSuiteTask.cs" />
+    <Compile Include="Tasks\TestTask.cs" />
     <Compile Include="TeamCityMessageFormatter.cs" />
     <Compile Include="TeamCityLogger.cs" />
     <Compile Include="TeamCityMessage.cs" />

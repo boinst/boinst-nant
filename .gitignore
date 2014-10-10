@@ -109,3 +109,4 @@ UpgradeLog*.XML
 
 # Install script (we have /install.cmd.tmpl)
 /install.cmd
+*.nupkg
