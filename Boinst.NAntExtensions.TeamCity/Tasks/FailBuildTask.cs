@@ -9,6 +9,7 @@
     /// <remarks>
     /// Invoking this task causes TeamCity to consider a build "failed"
     /// without stopping it immediately.
+    /// <a href="https://confluence.jetbrains.com/display/TCD8/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-ReportingBuildProblems" >see this page</a>.
     /// </remarks>
     [TaskName("teamcity-failbuild")]
     public class FailBuildTask : Task
@@ -25,7 +26,7 @@
 
         protected override void ExecuteTask()
         {
-            this.Log(Level.Error, "##teamcity[buildStatus status='FAILURE' text='{0}']", TeamCityMessageFormatter.EscapeInvalidCharacters(this.Message));
+            this.Log(Level.Error, "##teamcity[buildProblem description='{0}']", TeamCityMessageFormatter.EscapeInvalidCharacters(this.Message));
         }
     }
 }
